@@ -16,6 +16,16 @@ public class Employee {
 
     String address;
 
+    String contact;
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
     public Integer getId() {
         return id;
     }
