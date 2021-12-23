@@ -9,25 +9,10 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class Java16SeptSpringApplication {
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext context =
-
-				SpringApplication.run(Java16SeptSpringApplication.class, args);
+        ConfigurableApplicationContext context = SpringApplication.run(Java16SeptSpringApplication.class, args);
 
         Department department = context.getBean(Department.class);
         department.showEmp();
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //		Vodafone vodafone = new Vodafone();
 //		vodafone.calling();
@@ -42,7 +27,5 @@ public class Java16SeptSpringApplication {
 //		sim.calling();
 //		sim.data();
 
-
     }
-
 }
