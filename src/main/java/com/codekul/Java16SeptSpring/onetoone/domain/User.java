@@ -1,6 +1,7 @@
 package com.codekul.Java16SeptSpring.onetoone.domain;
 
 import com.codekul.Java16SeptSpring.onetoone.domain.Address;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 
@@ -14,6 +15,7 @@ public class User {
     private String name;
 
     @OneToOne(mappedBy ="user" ,cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Address address;
 
     public Integer getId() {
