@@ -27,3 +27,11 @@ public class CarController {
         return carRepository.findAll();
     }
 }
+
+//controller
+//rest controller
+//component
+//configuration
+//bean
+//
+
