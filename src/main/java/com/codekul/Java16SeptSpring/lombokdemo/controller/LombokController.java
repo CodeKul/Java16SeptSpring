@@ -1,7 +1,7 @@
 package com.codekul.Java16SeptSpring.lombokdemo.controller;
 
-import com.codekul.Java28SeptSpring.lombokdemo.domain.LombokDemo;
-import com.codekul.Java28SeptSpring.lombokdemo.repository.LombokRepo;
+import com.codekul.Java16SeptSpring.lombokdemo.domain.LombokDemo;
+import com.codekul.Java16SeptSpring.lombokdemo.repository.LombokRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
