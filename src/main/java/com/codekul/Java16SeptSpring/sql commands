@@ -1,0 +1,603 @@
+mysql -u root1 -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 103
+Server version: 8.0.27-0ubuntu0.20.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| java14oct          |
+| java14octspring    |
+| java16SeptSpring   |
+| java28SeptSpring   |
+| java28sept         |
+| mysql              |
+| performance_schema |
+| renshu             |
+| sys                |
++--------------------+
+10 rows in set (0.00 sec)
+
+mysql> use java28SeptSpring;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
++----------------------------+
+| Tables_in_java28SeptSpring |
++----------------------------+
+| address                    |
+| bike                       |
+| customer                   |
+| customer_product           |
+| employee                   |
+| lombok_demo                |
+| parts                      |
+| product                    |
+| service_demo               |
+| student                    |
+| user                       |
++----------------------------+
+11 rows in set (0.00 sec)
+
+mysql> drop table address;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> drop table student;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table student(id int primary key, name varchar(30),email varchar(30));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table address(id int primary key,city varchar(30),pin_code int,student_id int,foreign key(student_id) references mysql> create table address(id int primary key,city varchar(30),pin_code int,student_id int,foreign key(student_id) references
+student(id));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc student;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id    | int         | NO   | PRI | NULL    |       |
+| name  | varchar(30) | YES  |     | NULL    |       |
+| email | varchar(30) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> desc address;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| id         | int         | NO   | PRI | NULL    |       |
+| city       | varchar(30) | YES  |     | NULL    |       |
+| pin_code   | int         | YES  |     | NULL    |       |
+| student_id | int         | YES  | MUL | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> insert into student(id,name,email) values(1,'Akash','akash@gmail.com');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into student(id,name,email) values(2,'Suhas','suhas@gmail.com');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into student(id,name,email) values(3,'Ravi','ravi@gmail.com');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into address(id,city,pin_code,student_id) values (1,'Pune',4344,1);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into address(id,city,pin_code,student_id) values (2,'Mumbai0',4333,null);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into address(id,city,pin_code,student_id) values (3,'Mumbai',4554,2);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from student;
++----+-------+-----------------+
+| id | name  | email           |
++----+-------+-----------------+
+|  1 | Akash | akash@gmail.com |
+|  2 | Suhas | suhas@gmail.com |
+|  3 | Ravi  | ravi@gmail.com  |
++----+-------+-----------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from address;
++----+---------+----------+------------+
+| id | city    | pin_code | student_id |
++----+---------+----------+------------+
+|  1 | Pune    |     4344 |          1 |
+|  2 | Mumbai0 |     4333 |       NULL |
+|  3 | Mumbai  |     4554 |          2 |
++----+---------+----------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from student inner join address on student.id = address.student_id;
++----+-------+-----------------+----+--------+----------+------------+
+| id | name  | email           | id | city   | pin_code | student_id |
++----+-------+-----------------+----+--------+----------+------------+
+|  1 | Akash | akash@gmail.com |  1 | Pune   |     4344 |          1 |
+|  2 | Suhas | suhas@gmail.com |  3 | Mumbai |     4554 |          2 |
++----+-------+-----------------+----+--------+----------+------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from student left join address on student.id = address.student_id;
++----+-------+-----------------+------+--------+----------+------------+
+| id | name  | email           | id   | city   | pin_code | student_id |
++----+-------+-----------------+------+--------+----------+------------+
+|  1 | Akash | akash@gmail.com |    1 | Pune   |     4344 |          1 |
+|  2 | Suhas | suhas@gmail.com |    3 | Mumbai |     4554 |          2 |
+|  3 | Ravi  | ravi@gmail.com  | NULL | NULL   |     NULL |       NULL |
++----+-------+-----------------+------+--------+----------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from student right join address on student.id = address.student_id;
++------+-------+-----------------+----+---------+----------+------------+
+| id   | name  | email           | id | city    | pin_code | student_id |
++------+-------+-----------------+----+---------+----------+------------+
+|    1 | Akash | akash@gmail.com |  1 | Pune    |     4344 |          1 |
+| NULL | NULL  | NULL            |  2 | Mumbai0 |     4333 |       NULL |
+|    2 | Suhas | suhas@gmail.com |  3 | Mumbai  |     4554 |          2 |
++------+-------+-----------------+----+---------+----------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from student cross join address on student.id = address.student_id;
++----+-------+-----------------+----+--------+----------+------------+
+| id | name  | email           | id | city   | pin_code | student_id |
++----+-------+-----------------+----+--------+----------+------------+
+|  1 | Akash | akash@gmail.com |  1 | Pune   |     4344 |          1 |
+|  2 | Suhas | suhas@gmail.com |  3 | Mumbai |     4554 |          2 |
++----+-------+-----------------+----+--------+----------+------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from student left join address on student.id = address.student_id union all select * from student right join address on student.id = address.student_id;
++------+-------+-----------------+------+---------+----------+------------+
+| id   | name  | email           | id   | city    | pin_code | student_id |
++------+-------+-----------------+------+---------+----------+------------+
+|    1 | Akash | akash@gmail.com |    1 | Pune    |     4344 |          1 |
+|    2 | Suhas | suhas@gmail.com |    3 | Mumbai  |     4554 |          2 |
+|    3 | Ravi  | ravi@gmail.com  | NULL | NULL    |     NULL |       NULL |
+|    1 | Akash | akash@gmail.com |    1 | Pune    |     4344 |          1 |
+| NULL | NULL  | NULL            |    2 | Mumbai0 |     4333 |       NULL |
+|    2 | Suhas | suhas@gmail.com |    3 | Mumbai  |     4554 |          2 |
++------+-------+-----------------+------+---------+----------+------------+
+6 rows in set (0.00 sec)
+
+mysql> select * from student left outer join address on student.id = address.student_id;
++----+-------+-----------------+------+--------+----------+------------+
+| id | name  | email           | id   | city   | pin_code | student_id |
++----+-------+-----------------+------+--------+----------+------------+
+|  1 | Akash | akash@gmail.com |    1 | Pune   |     4344 |          1 |
+|  2 | Suhas | suhas@gmail.com |    3 | Mumbai |     4554 |          2 |
+|  3 | Ravi  | ravi@gmail.com  | NULL | NULL   |     NULL |       NULL |
++----+-------+-----------------+------+--------+----------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from student right outer join address on student.id = address.student_id;
++------+-------+-----------------+----+---------+----------+------------+
+| id   | name  | email           | id | city    | pin_code | student_id |
++------+-------+-----------------+----+---------+----------+------------+
+|    1 | Akash | akash@gmail.com |  1 | Pune    |     4344 |          1 |
+| NULL | NULL  | NULL            |  2 | Mumbai0 |     4333 |       NULL |
+|    2 | Suhas | suhas@gmail.com |  3 | Mumbai  |     4554 |          2 |
++------+-------+-----------------+----+---------+----------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from student;
++----+-------+-----------------+
+| id | name  | email           |
++----+-------+-----------------+
+|  1 | Akash | akash@gmail.com |
+|  2 | Suhas | suhas@gmail.com |
+|  3 | Ravi  | ravi@gmail.com  |
++----+-------+-----------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from address;
++----+---------+----------+------------+
+| id | city    | pin_code | student_id |
++----+---------+----------+------------+
+|  1 | Pune    |     4344 |          1 |
+|  2 | Mumbai0 |     4333 |       NULL |
+|  3 | Mumbai  |     4554 |          2 |
++----+---------+----------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from address order by city;
++----+---------+----------+------------+
+| id | city    | pin_code | student_id |
++----+---------+----------+------------+
+|  3 | Mumbai  |     4554 |          2 |
+|  2 | Mumbai0 |     4333 |       NULL |
+|  1 | Pune    |     4344 |          1 |
++----+---------+----------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from address order by pin_code;
++----+---------+----------+------------+
+| id | city    | pin_code | student_id |
++----+---------+----------+------------+
+|  2 | Mumbai0 |     4333 |       NULL |
+|  1 | Pune    |     4344 |          1 |
+|  3 | Mumbai  |     4554 |          2 |
++----+---------+----------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from address order by pin_code desc;
++----+---------+----------+------------+
+| id | city    | pin_code | student_id |
++----+---------+----------+------------+
+|  3 | Mumbai  |     4554 |          2 |
+|  1 | Pune    |     4344 |          1 |
+|  2 | Mumbai0 |     4333 |       NULL |
++----+---------+----------+------------+
+3 rows in set (0.00 sec)
+
+mysql> alter table student add column dob date;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from student;
++----+-------+-----------------+------+
+| id | name  | email           | dob  |
++----+-------+-----------------+------+
+|  1 | Akash | akash@gmail.com | NULL |
+|  2 | Suhas | suhas@gmail.com | NULL |
+|  3 | Ravi  | ravi@gmail.com  | NULL |
++----+-------+-----------------+------+
+3 rows in set (0.00 sec)
+
+mysql> update student set dob='2000-01-01';
+Query OK, 3 rows affected (0.01 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql> select * from student;
++----+-------+-----------------+------------+
+| id | name  | email           | dob        |
++----+-------+-----------------+------------+
+|  1 | Akash | akash@gmail.com | 2000-01-01 |
+|  2 | Suhas | suhas@gmail.com | 2000-01-01 |
+|  3 | Ravi  | ravi@gmail.com  | 2000-01-01 |
++----+-------+-----------------+------------+
+3 rows in set (0.00 sec)
+
+mysql> update student set dob='2000-07-12' where id = 2;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update student set dob='2000-09-22' where id = 3;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from student;
++----+-------+-----------------+------------+
+| id | name  | email           | dob        |
++----+-------+-----------------+------------+
+|  1 | Akash | akash@gmail.com | 2000-01-01 |
+|  2 | Suhas | suhas@gmail.com | 2000-07-12 |
+|  3 | Ravi  | ravi@gmail.com  | 2000-09-22 |
++----+-------+-----------------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from address order by dob;
+ERROR 1054 (42S22): Unknown column 'dob' in 'order clause'
+mysql> select * from student order by dob;
++----+-------+-----------------+------------+
+| id | name  | email           | dob        |
++----+-------+-----------------+------------+
+|  1 | Akash | akash@gmail.com | 2000-01-01 |
+|  2 | Suhas | suhas@gmail.com | 2000-07-12 |
+|  3 | Ravi  | ravi@gmail.com  | 2000-09-22 |
++----+-------+-----------------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from student where dob between '2000-03-01' and '2000-08-01';
++----+-------+-----------------+------------+
+| id | name  | email           | dob        |
++----+-------+-----------------+------------+
+|  2 | Suhas | suhas@gmail.com | 2000-07-12 |
++----+-------+-----------------+------------+
+1 row in set (0.00 sec)
+
+mysql> select * from address where city in('Mumbai');
++----+--------+----------+------------+
+| id | city   | pin_code | student_id |
++----+--------+----------+------------+
+|  3 | Mumbai |     4554 |          2 |
++----+--------+----------+------------+
+1 row in set (0.00 sec)
+
+mysql> select * from address where city in('Mumbai','Pune');
++----+--------+----------+------------+
+| id | city   | pin_code | student_id |
++----+--------+----------+------------+
+|  1 | Pune   |     4344 |          1 |
+|  3 | Mumbai |     4554 |          2 |
++----+--------+----------+------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from student;
++----+-------+-----------------+------------+
+| id | name  | email           | dob        |
++----+-------+-----------------+------------+
+|  1 | Akash | akash@gmail.com | 2000-01-01 |
+|  2 | Suhas | suhas@gmail.com | 2000-07-12 |
+|  3 | Ravi  | ravi@gmail.com  | 2000-09-22 |
++----+-------+-----------------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from student limit 1;
++----+-------+-----------------+------------+
+| id | name  | email           | dob        |
++----+-------+-----------------+------------+
+|  1 | Akash | akash@gmail.com | 2000-01-01 |
++----+-------+-----------------+------------+
+1 row in set (0.00 sec)
+
+mysql> create table customer(id int primary key,name varchar(20),email varchar(30));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table product(id int primary key,p_name varchar(20),p_price int);
+ERROR 1050 (42S01): Table 'product' already exists
+mysql> drop table product;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table product(id int primary key,p_name varchar(20),p_price int);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table orders(id int primary key,quantity int ,total_price int,cust_id int, p_id int, foreign key(cust_id) references customer(id),foreign key(p_id) references product(id));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> desc customer;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id    | int         | NO   | PRI | NULL    |       |
+| name  | varchar(20) | YES  |     | NULL    |       |
+| email | varchar(30) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> insert into customer(id,name,email) values(1,'Akash','akash@gmail.com');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into customer(id,name,email) values(2,'Ravi','ravi@gmail.com');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into customer(id,name,email) values(3,'Suhas','suhas@gmail.com');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> desc product;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| id      | int         | NO   | PRI | NULL    |       |
+| p_name  | varchar(20) | YES  |     | NULL    |       |
+| p_price | int         | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> insert into product(id,p_name,p_price) values(1,'Mouse',100);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into product(id,p_name,p_price) values(2,'router',400);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into product(id,p_name,p_price) values(3,'adapter',900);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> desc orders;
++-------------+------+------+-----+---------+-------+
+| Field       | Type | Null | Key | Default | Extra |
++-------------+------+------+-----+---------+-------+
+| id          | int  | NO   | PRI | NULL    |       |
+| quantity    | int  | YES  |     | NULL    |       |
+| total_price | int  | YES  |     | NULL    |       |
+| cust_id     | int  | YES  | MUL | NULL    |       |
+| p_id        | int  | YES  | MUL | NULL    |       |
++-------------+------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> insert into orders(id,quantity,total_price,cust_id,p_id)values(1,1,100,1,1);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into orders(id,quantity,total_price,cust_id,p_id)values(2,2,800,1,2);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into orders(id,quantity,total_price,cust_id,p_id)values(3,1,900,2,3);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into orders(id,quantity,total_price,cust_id,p_id)values(4,1,100,3,1);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from customer;
++----+-------+-----------------+
+| id | name  | email           |
++----+-------+-----------------+
+|  1 | Akash | akash@gmail.com |
+|  2 | Ravi  | ravi@gmail.com  |
+|  3 | Suhas | suhas@gmail.com |
++----+-------+-----------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from product;
++----+---------+---------+
+| id | p_name  | p_price |
++----+---------+---------+
+|  1 | Mouse   |     100 |
+|  2 | router  |     400 |
+|  3 | adapter |     900 |
++----+---------+---------+
+3 rows in set (0.01 sec)
+
+mysql> select * from orders;
++----+----------+-------------+---------+------+
+| id | quantity | total_price | cust_id | p_id |
++----+----------+-------------+---------+------+
+|  1 |        1 |         100 |       1 |    1 |
+|  2 |        2 |         800 |       1 |    2 |
+|  3 |        1 |         900 |       2 |    3 |
+|  4 |        1 |         100 |       3 |    1 |
++----+----------+-------------+---------+------+
+4 rows in set (0.00 sec)
+
+mysql> select name from customer inner join orders on customer.id = orders.cust_id;
++-------+
+| name  |
++-------+
+| Akash |
+| Akash |
+| Ravi  |
+| Suhas |
++-------+
+4 rows in set (0.00 sec)
+
+mysql> select count(*),name from customer inner join orders on customer.id = orders.cust_id group by name;
++----------+-------+
+| count(*) | name  |
++----------+-------+
+|        2 | Akash |
+|        1 | Ravi  |
+|        1 | Suhas |
++----------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select count(*) as product_count,name from customer inner join orders on customer.id = orders.cust_id group by name;
++---------------+-------+
+| product_count | name  |
++---------------+-------+
+|             2 | Akash |
+|             1 | Ravi  |
+|             1 | Suhas |
++---------------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select count(*) as product_count,name from customer inner join orders on customer.id = orders.cust_id group by name order by product_count desc limit 1;
++---------------+-------+
+| product_count | name  |
++---------------+-------+
+|             2 | Akash |
++---------------+-------+
+1 row in set (0.00 sec)
+
+mysql> insert into orders(id,quantity,total_price,cust_id,p_id)values(5,1,900,1,3);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select count(*) as product_count,name from customer inner join orders on customer.id = orders.cust_id group by name order by product_count desc limit 1;
++---------------+-------+
+| product_count | name  |
++---------------+-------+
+|             3 | Akash |
++---------------+-------+
+1 row in set (0.00 sec)
+
+mysql> select * from orders;
++----+----------+-------------+---------+------+
+| id | quantity | total_price | cust_id | p_id |
++----+----------+-------------+---------+------+
+|  1 |        1 |         100 |       1 |    1 |
+|  2 |        2 |         800 |       1 |    2 |
+|  3 |        1 |         900 |       2 |    3 |
+|  4 |        1 |         100 |       3 |    1 |
+|  5 |        1 |         900 |       1 |    3 |
++----+----------+-------------+---------+------+
+5 rows in set (0.00 sec)
+
+mysql> select name from customer inner join orders on orders.cust_id= customer.id;
++-------+
+| name  |
++-------+
+| Akash |
+| Akash |
+| Akash |
+| Ravi  |
+| Suhas |
++-------+
+5 rows in set (0.00 sec)
+
+mysql> select total_price,name from customer inner join orders on orders.cust_id= customer.id ;
++-------------+-------+
+| total_price | name  |
++-------------+-------+
+|         100 | Akash |
+|         800 | Akash |
+|         900 | Akash |
+|         900 | Ravi  |
+|         100 | Suhas |
++-------------+-------+
+5 rows in set (0.00 sec)
+
+mysql> select sum(total_price),name from customer inner join orders on orders.cust_id= customer.id group by name;
++------------------+-------+
+| sum(total_price) | name  |
++------------------+-------+
+|             1800 | Akash |
+|              900 | Ravi  |
+|              100 | Suhas |
++------------------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select sum(total_price) as total,name from customer inner join orders on orders.cust_id= customer.id group by name order
+ by total desc limit 1;
++-------+-------+
+| total | name  |
++-------+-------+
+|  1800 | Akash |
++-------+-------+
+1 row in set (0.00 sec)
+
+
+mysql> select max(quantity),name from customer inner join orders on orders.cust_id= customer.id group by name;
++---------------+-------+
+| max(quantity) | name  |
++---------------+-------+
+|             2 | Akash |
+|             1 | Ravi  |
+|             1 | Suhas |
++---------------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select max(quantity)as quantity,name from customer inner join orders on orders.cust_id= customer.id group by name order
+by quantity desc limit 1 ;
++----------+-------+
+| quantity | name  |
++----------+-------+
+|        2 | Akash |
++----------+-------+
+1 row in set (0.00 sec)
+
+mysql> select max(quantity)as quantity,name from customer inner join orders on orders.cust_id= customer.id group by name having quantity >0 order by quantity desc limit 1 ;
++----------+-------+
+| quantity | name  |
++----------+-------+
+|        2 | Akash |
++----------+-------+
+1 row in set (0.00 sec)
+
+mysql> select max(quantity)as quantity,name from customer inner join orders on orders.cust_id= customer.id group by name having quantity >5 order by quantity desc limit 1 ;
+Empty set (0.00 sec)
+
+mysql> update orders set quantity=5 where id = 2;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select max(quantity)as quantity,name from customer inner join orders on orders.cust_id= customer.id group by name having quantity >=5 order by quantity desc limit 1 ;
++----------+-------+
+| quantity | name  |
++----------+-------+
+|        5 | Akash |
++----------+-------+
+1 row in set (0.00 sec)
+
